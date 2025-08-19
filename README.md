@@ -164,24 +164,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Web Audio API** for audio functionality
 - **Web Speech API** for voice announcements
 
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/mehmeterguden/fitness-timer/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/mehmeterguden/fitness-timer/discussions)
-- **Email**: [Contact via GitHub](https://github.com/mehmeterguden)
-
-## 🌟 Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=mehmeterguden/fitness-timer&type=Date)](https://star-history.com/#mehmeterguden/fitness-timer&Date)
-
 ---
 
 <div align="center">
 
 **Made with ❤️ by [Mehmet Ergüden](https://github.com/mehmeterguden)**
-
-If this project helps you, please give it a ⭐️!
-
-[![GitHub followers](https://img.shields.io/github/followers/mehmeterguden?label=Follow%20Me&style=social)](https://github.com/mehmeterguden)
 
 </div>
