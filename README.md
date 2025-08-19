@@ -8,9 +8,11 @@
 
 A modern, feature-rich workout timer application built with vanilla JavaScript, featuring beautiful glassmorphism design, program management, and intelligent rest timing.
 
-![Fitness Timer Demo](https://img.shields.io/badge/Demo-Live%20Preview-blue?style=for-the-badge)
+[![Fitness Timer Demo](https://img.shields.io/badge/Demo-Live%20Preview-blue?style=for-the-badge)](https://mehmeterguden.github.io/fitness-timer/)
 
 ## ✨ Features
+
+> **[🎯 Try it live!](https://mehmeterguden.github.io/fitness-timer/)** - Experience the full functionality in your browser
 
 ### 🎯 **Core Timer Functionality**
 - **Individual Exercise Timer**: Set-based workouts with customizable rest periods
@@ -43,6 +45,9 @@ A modern, feature-rich workout timer application built with vanilla JavaScript, 
 - **Keyboard Shortcuts**: Space bar for play/pause
 
 ## 🚀 Quick Start
+
+### 🌐 **Live Demo**
+**[Try the Fitness Timer Live!](https://mehmeterguden.github.io/fitness-timer/)**
 
 ### 1. **Clone the Repository**
 ```bash
