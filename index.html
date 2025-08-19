@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fitness Timer</title>
+      <!-- Favicon (embedded SVG) -->
+      <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Crect width="100" height="100" rx="16" ry="16" fill="%238b5cf6"/%3E%3Ctext x="50" y="68" text-anchor="middle" font-size="68" font-family="Segoe UI Emoji, Apple Color Emoji, Noto Color Emoji"%3E💪%3C/text%3E%3C/svg%3E'>
+      <link rel="apple-touch-icon" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Crect width="100" height="100" rx="16" ry="16" fill="%238b5cf6"/%3E%3Ctext x="50" y="68" text-anchor="middle" font-size="68" font-family="Segoe UI Emoji, Apple Color Emoji, Noto Color Emoji"%3E💪%3C/text%3E%3C/svg%3E'>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+      <style>
+        /* Stop any inner animations when paused */
+        .program-timer-paused * { animation: none !important; }
+      </style>
+  </head>
+  <body class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-x-hidden">
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+      <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-yellow-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+      <div class="absolute top-40 left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+    </div>
+
+    <!-- Home Header -->
+    <header id="mainHeader" class="relative z-20 glass bg-white/10 border-b border-white/20">
+      <div class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+          <button onclick="showPage('homePage')" class="flex items-center space-x-4 cursor-pointer hover:opacity-80 transition-all duration-300">
+            <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+              <i class="fas fa-dumbbell text-white text-xl"></i>
+            </div>
+            <div>
+              <h1 class="text-2xl font-bold text-white">Fitness Timer</h1>
+              <p class="text-white/70 text-sm">Manage your training programs</p>
+            </div>
+          </button>
+          <div class="flex items-center space-x-4">
+            <!-- Programs Dropdown -->
+            <div class="relative" id="programsDropdown">
+              <button id="programsBtn" class="px-6 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all duration-300 flex items-center">
+                <i class="fas fa-list mr-2"></i>Programs
+                <i class="fas fa-chevron-down ml-2 transition-transform duration-300"></i>
+              </button>
+              <div id="programsMenu" class="absolute right-0 mt-2 w-80 glass bg-white/20 backdrop-blur-xl rounded-2xl border border-white/30 shadow-2xl opacity-0 invisible transform translate-y-2 transition-all duration-300 z-50">
+                <div class="p-4">
+                  <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-white">Your Programs</h3>
+                    <button id="newProgramBtn" class="px-3 py-1 bg-gradient-to-r from-green-500 to-blue-500 text-white text-sm rounded-lg hover:from-green-600 hover:to-blue-600 transition-all duration-300">
+                      <i class="fas fa-plus mr-1"></i>New
+                    </button>
+                  </div>
+                  <div id="programsList" class="space-y-2 max-h-64 overflow-y-auto">
+                     <!-- Programs will be listed here -->
+                  </div>
+                  <div id="noProgramsMessage" class="text-center py-8 text-white/70">
+                    <i class="fas fa-folder-open text-3xl mb-2"></i>
+                    <p>No programs yet</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Program Page Header -->
+    <header id="programHeader" class="relative z-20 glass bg-white/10 border-b border-white/20 hidden">
+      <div class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+          <button onclick="showPage('homePage')" class="flex items-center space-x-4 cursor-pointer hover:opacity-80 transition-all duration-300">
+            <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+              <i class="fas fa-dumbbell text-white text-xl"></i>
+            </div>
+            <div>
+              <h1 class="text-2xl font-bold text-white">Fitness Timer</h1>
+              <p id="currentProgram" class="text-white/70 text-sm">Program Name</p>
+            </div>
+          </button>
+          <div class="flex items-center space-x-4">
+            <!-- Programs Dropdown -->
+            <div class="relative" id="programsDropdownProgram">
+              <button id="programsBtnProgram" class="px-6 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all duration-300 flex items-center">
+                <i class="fas fa-list mr-2"></i>Programs
+                <i class="fas fa-chevron-down ml-2 transition-transform duration-300"></i>
+              </button>
+              <div id="programsMenuProgram" class="absolute right-0 mt-2 w-80 glass bg-white/20 backdrop-blur-xl rounded-2xl border border-white/30 shadow-2xl opacity-0 invisible transform translate-y-2 transition-all duration-300 z-50">
+                <div class="p-4">
+                  <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-white">Your Programs</h3>
+                    <button id="newProgramBtnProgram" class="px-3 py-1 bg-gradient-to-r from-green-500 to-blue-500 text-white text-sm rounded-lg hover:from-green-600 hover:to-blue-600 transition-all duration-300">
+                      <i class="fas fa-plus mr-1"></i>New
+                    </button>
+                  </div>
+                   <div id="programsListProgram" class="space-y-2 max-h-64 overflow-y-auto">
+                    <!-- Programs will be listed here -->
+                  </div>
+                  <div id="noProgramsMessageProgram" class="text-center py-8 text-white/70">
+                    <i class="fas fa-folder-open text-3xl mb-2"></i>
+                    <p>No programs yet</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button id="backToHome" class="px-6 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all duration-300 flex items-center">
+              <i class="fas fa-home mr-2"></i>Home
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="relative z-10 container mx-auto px-4 py-6 max-w-6xl">
+      <!-- Home Page - Program Name Input -->
+      <div id="homePage" class="page">
+        <div class="text-center mb-12">
+          <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mb-6 shadow-2xl">
+            <i class="fas fa-dumbbell text-3xl text-white"></i>
+          </div>
+             <h1 class="text-5xl font-black mb-6 gradient-text">Fitness Timer</h1>
+          <p class="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed mb-12">Create your workout program and get perfect results with a timer!</p>
+        </div>
+
+        <div class="max-w-lg mx-auto">
+          <div class="glass bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
+            <div class="text-center mb-6">
+              <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-400 to-blue-500 rounded-full mb-4">
+                <i class="fas fa-plus text-2xl text-white"></i>
+              </div>
+              <h2 class="text-3xl font-bold text-white mb-3">Create New Program</h2>
+              <p class="text-lg text-white/70">Start your training program</p>
+            </div>
+            
+            <div class="space-y-6">
+              <div>
+                <label class="text-white font-semibold text-lg flex items-center mb-3">
+                  <i class="fas fa-clipboard-list text-purple-400 mr-3"></i>Program Name
+                </label>
+                <input type="text" id="programName" placeholder="e.g., Upper Body Workout" 
+                       class="w-full px-6 py-4 rounded-2xl border-2 border-purple-300/50 bg-white/20 text-white placeholder-white/50 focus:border-purple-400 focus:bg-white/30 input-focus transition-all duration-300 text-lg text-center" />
+              </div>
+              
+              <button id="createProgramBtn" class="w-full py-4 btn-gradient text-white font-bold text-xl rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center">
+                <i class="fas fa-rocket mr-4"></i>Create Program
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Program Page - Add Exercise -->
+      <div id="programPage" class="page hidden">
+        <div class="max-w-6xl mx-auto">
+               <!-- Add Exercise Section -->
+              <div class="glass bg-white/10 rounded-3xl p-6 border border-white/20 shadow-2xl mb-8">
+                <div class="text-center mb-6">
+                  <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mb-4">
+                    <i class="fas fa-dumbbell text-2xl text-white"></i>
+                  </div>
+                  <h2 class="text-2xl font-bold text-white mb-2">Add Exercise</h2>
+                  <p class="text-white/70">Add exercises to your program</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                  <div class="flex-1">
+                    <input type="text" id="exerciseNameInput" placeholder="Enter exercise name..." 
+                           class="w-full px-4 py-3 rounded-xl border-2 border-blue-300/50 bg-white/20 text-white placeholder-white/50 focus:border-blue-400 focus:bg-white/30 input-focus transition-all duration-300" />
+                  </div>
+                  <button id="addExerciseBtn" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold rounded-xl hover:from-blue-600 hover:to-purple-600 transition-all duration-300 flex items-center">
+                    <i class="fas fa-plus mr-2"></i>Add
+                  </button>
+                </div>
+              </div>
+
+            <!-- Start Program Section -->
+            <div class="glass bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl mb-8">
+              <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full mb-4">
+                  <i class="fas fa-play text-2xl text-white"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-2">Start Program</h3>
+                <p class="text-white/70">Start all exercises in order</p>
+              </div>
+              <!-- Rest Settings and Start -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
+                <!-- Left: Rest Duration -->
+                <div>
+                  <label class="text-white font-semibold text-lg flex items-center mb-3">
+                    <i class="fas fa-clock text-blue-400 mr-2"></i>Exercise Rest Duration
+                  </label>
+                  <div class="space-y-3">
+                    <div class="flex items-center space-x-2">
+                      <button class="rest-duration-option px-2 py-1 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-all duration-300 text-xs font-medium" data-duration="10">10s</button>
+                      <button class="rest-duration-option px-2 py-1 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-all duration-300 text-xs font-medium" data-duration="30">30s</button>
+                      <button class="rest-duration-option px-2 py-1 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-all duration-300 text-xs font-medium" data-duration="60">1m</button>
+                      <button class="rest-duration-option px-2 py-1 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-all duration-300 text-xs font-medium" data-duration="180">3m</button>
+                      <button class="rest-duration-option px-2 py-1 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-all duration-300 text-xs font-medium" data-duration="300">5m</button>
+                      <input type="text" id="exerciseRestDuration" placeholder="Custom duration..." value="1 minute"
+                             class="w-24 px-2 py-1 rounded-lg border-2 border-blue-300/50 bg-white/20 text-white placeholder-white/50 focus:border-blue-400 focus:bg-white/30 input-focus transition-all duration-300 text-xs" />
+                    </div>
+                    <p class="text-white/60 text-xs">Examples: 1 minute, 30 seconds, 1 min, 30 sec</p>
+                  </div>
+                </div>
+                <!-- Right: Rest Color -->
+                <div>
+                  <label class="text-white font-semibold text-lg flex items-center mb-3">
+                    <i class="fas fa-palette text-purple-400 mr-2"></i>Rest Color
+                  </label>
+                  <div class="flex space-x-2">
+                    <button class="program-rest-color-option w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 border-2 border-blue-300 hover:scale-110 transition-all duration-300 ring-2 ring-white" data-color="blue"></button>
+                    <button class="program-rest-color-option w-6 h-6 rounded-full bg-gradient-to-r from-green-500 to-green-600 border-2 border-green-300 hover:scale-110 transition-all duration-300" data-color="green"></button>
+                    <button class="program-rest-color-option w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 border-2 border-purple-300 hover:scale-110 transition-all duration-300" data-color="purple"></button>
+                    <button class="program-rest-color-option w-6 h-6 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 border-2 border-orange-300 hover:scale-110 transition-all duration-300" data-color="orange"></button>
+                    <button class="program-rest-color-option w-6 h-6 rounded-full bg-gradient-to-r from-pink-500 to-pink-600 border-2 border-pink-300 hover:scale-110 transition-all duration-300" data-color="pink"></button>
+                  </div>
+                </div>
+                <!-- Bottom: Start Button -->
+                <div class="md:col-span-2 flex justify-center pt-2">
+                  <button id="startProgramBtn" class="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-lg rounded-xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center">
+                    <i class="fas fa-rocket mr-3"></i>Start Program
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          <!-- Your Exercises and Ordering -->
+          <div class="glass bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
+            <div class="text-center mb-8">
+              <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full mb-4">
+                <i class="fas fa-dumbbell text-2xl text-white"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-white mb-2">Your Exercises</h3>
+              <p class="text-white/70">Drag & drop to sort and edit</p>
+            </div>
+            
+            <div id="exercisesOrderList" class="space-y-3">
+              <!-- Exercises will be listed here -->
+            </div>
+            
+            <div id="noExercisesMessage" class="text-center py-8 text-white/70">
+              <i class="fas fa-dumbbell text-3xl mb-3"></i>
+              <p class="text-lg">No exercises yet</p>
+              <p class="text-sm">Use the form above to add an exercise</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise Detail Page -->
+      <div id="exerciseDetailPage" class="page hidden">
+        <div class="max-w-6xl mx-auto">
+          <div class="glass bg-white/10 rounded-3xl p-12 border border-white/20 shadow-2xl">
+            <div class="text-center mb-12">
+              <button id="backToProgram" class="absolute top-8 left-8 text-white/70 hover:text-white transition-colors">
+                <i class="fas fa-arrow-left text-3xl"></i>
+              </button>
+              <h2 id="exerciseDetailTitle" class="text-5xl font-bold text-white mb-4">Exercise Details</h2>
+              <p class="text-xl text-white/70">Adjust exercise parameters</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              <!-- Set Count -->
+              <div class="space-y-4">
+                <label class="text-white font-semibold text-xl flex items-center">
+                  <i class="fas fa-layer-group text-blue-400 mr-3"></i>Set Count
+                </label>
+                <input type="number" id="setCount" min="1" placeholder="2" 
+                       class="w-full px-6 py-4 rounded-2xl border-2 border-blue-300/50 bg-white/20 text-white placeholder-white/50 focus:border-blue-400 focus:bg-white/30 input-focus transition-all duration-300 text-xl" />
+              </div>
+              
+              <!-- Rep Count -->
+              <div class="space-y-4">
+                <label class="text-white font-semibold text-xl flex items-center">
+                  <i class="fas fa-redo text-green-400 mr-3"></i>Rep Count
+                </label>
+                <input type="number" id="repCount" min="1" placeholder="10" 
+                       class="w-full px-6 py-4 rounded-2xl border-2 border-green-300/50 bg-white/20 text-white placeholder-white/50 focus:border-green-400 focus:bg-white/30 input-focus transition-all duration-300 text-xl" />
+              </div>
+              
+              <!-- Move Count -->
+              <div class="space-y-4">
+                <label class="text-white font-semibold text-xl flex items-center">
+                  <i class="fas fa-fire text-orange-400 mr-3"></i>Move Count
+                </label>
+                <input type="number" id="moveCount" min="1" max="5" placeholder="1" 
+                       class="w-full px-6 py-4 rounded-2xl border-2 border-orange-300/50 bg-white/20 text-white placeholder-white/50 focus:border-orange-400 focus:bg-white/30 input-focus transition-all duration-300 text-xl" />
+              </div>
+              
+              <!-- Rest Between Moves Option -->
+              <div class="space-y-4">
+                <label class="text-white font-semibold text-xl flex items-center">
+                  <i class="fas fa-toggle-on text-purple-400 mr-3"></i>Rest Between Moves
+                </label>
+                <div class="flex items-center">
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="restBetweenMovesEnabled" class="sr-only peer">
+                    <div class="w-11 h-6 bg-white/20 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-purple-500 peer-checked:to-pink-500"></div>
+                    <span class="ml-3 text-white font-medium">Active</span>
+                  </label>
+                </div>
+                <p class="text-white/60 text-sm">Give rest after each move</p>
+                
+                <!-- Rest Between Moves Color -->
+                <div class="mt-4">
+                  <label class="text-white font-semibold text-lg flex items-center mb-2">
+                    <i class="fas fa-palette text-green-400 mr-2"></i>Rest Color
+                  </label>
+                  <div class="flex space-x-3">
+                    <button class="rest-color-option w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 border-2 border-blue-300 hover:scale-110 transition-all duration-300" data-color="blue"></button>
+                    <button class="rest-color-option w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-green-600 border-2 border-green-300 hover:scale-110 transition-all duration-300" data-color="green"></button>
+                    <button class="rest-color-option w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 border-2 border-purple-300 hover:scale-110 transition-all duration-300" data-color="purple"></button>
+                    <button class="rest-color-option w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 border-2 border-orange-300 hover:scale-110 transition-all duration-300" data-color="orange"></button>
+                    <button class="rest-color-option w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-pink-600 border-2 border-pink-300 hover:scale-110 transition-all duration-300" data-color="pink"></button>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Rest Between Moves Duration (Optional) -->
+              <div id="restBetweenMovesContainer" class="space-y-4 hidden">
+                <label class="text-white font-semibold text-xl flex items-center">
+                  <i class="fas fa-pause text-red-400 mr-3"></i>Rest Between Moves (s)
+                </label>
+                <input type="number" id="restBetweenMoves" min="0" placeholder="5" 
+                       class="w-full px-6 py-4 rounded-2xl border-2 border-red-300/50 bg-white/20 text-white placeholder-white/50 focus:border-red-400 focus:bg-white/30 input-focus transition-all duration-300 text-xl" />
+              </div>
+              
+              <!-- Rest Between Sets -->
+              <div class="space-y-4">
+                <label class="text-white font-semibold text-xl flex items-center">
+                  <i class="fas fa-pause text-red-400 mr-3"></i>Rest Between Sets (s)
+                </label>
+                <input type="number" id="restBetweenSets" min="0" placeholder="30" 
+                       class="w-full px-6 py-4 rounded-2xl border-2 border-red-300/50 bg-white/20 text-white placeholder-white/50 focus:border-red-400 focus:bg-white/30 input-focus transition-all duration-300 text-xl" />
+                
+                <!-- Set Rest Color -->
+                <div class="mt-4">
+                  <label class="text-white font-semibold text-lg flex items-center mb-2">
+                    <i class="fas fa-palette text-orange-400 mr-2"></i>Set Rest Color
+                  </label>
+                  <div class="flex space-x-3">
+                    <button class="set-rest-color-option w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 border-2 border-blue-300 hover:scale-110 transition-all duration-300" data-color="blue"></button>
+                    <button class="set-rest-color-option w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-green-600 border-2 border-green-300 hover:scale-110 transition-all duration-300" data-color="green"></button>
+                    <button class="set-rest-color-option w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 border-2 border-purple-300 hover:scale-110 transition-all duration-300" data-color="purple"></button>
+                    <button class="set-rest-color-option w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 border-2 border-orange-300 hover:scale-110 transition-all duration-300" data-color="orange"></button>
+                    <button class="set-rest-color-option w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-pink-600 border-2 border-pink-300 hover:scale-110 transition-all duration-300" data-color="pink"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Move Details -->
+            <div id="movesContainer" class="mb-8">
+              <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
+                <i class="fas fa-dumbbell text-yellow-400 mr-3"></i>Move Details
+              </h3>
+              <div id="movesList" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Move fields will be generated dynamically -->
+              </div>
+            </div>
+            
+            <!-- Example Exercise Flow -->
+            <div class="glass bg-white/5 rounded-2xl p-6 mb-8">
+              <div class="flex items-center justify-between mb-4 cursor-pointer" onclick="toggleExerciseFlow()">
+                <h3 class="text-xl font-bold text-white flex items-center">
+                  <i class="fas fa-info-circle text-blue-400 mr-3"></i>Exercise Flow
+                </h3>
+                <i id="exerciseFlowToggle" class="fas fa-chevron-down text-white/70 transition-transform duration-300"></i>
+              </div>
+              <div id="exerciseFlow" class="text-white/80 space-y-2 hidden">
+                <!-- Exercise flow will be shown here -->
+              </div>
+            </div>
+            
+            <div class="flex space-x-6">
+              <button id="saveExercise" class="flex-1 py-6 btn-gradient text-white font-bold text-2xl rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center">
+                <i class="fas fa-save mr-4"></i>Save
+              </button>
+              <button id="startExercise" class="flex-1 py-6 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-2xl rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center">
+                <i class="fas fa-play mr-4"></i>Start
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Program Timer Section -->
+      <div id="programTimerSection" class="page hidden">
+        <div class="max-w-6xl mx-auto">
+          <!-- Timer Controls -->
+          <div class="flex justify-between items-center mb-8">
+            <button id="backToProgramFromTimer" class="text-white/70 hover:text-white transition-colors">
+              <i class="fas fa-arrow-left text-3xl"></i>
+            </button>
+            
+            <div class="flex items-center space-x-4">
+              <!-- Program Progress -->
+              <div id="programProgress" class="px-6 py-3 bg-white/10 text-white rounded-xl">
+                <span id="currentExerciseProgress">Exercise 1 / 3</span>
+              </div>
+              
+              <!-- Timer Status -->
+              <div id="programTimerStatus" class="px-6 py-3 bg-white/10 text-white rounded-xl">
+                <span id="currentProgramPosition">Program is starting...</span>
+              </div>
+              
+              <!-- Program Audio Settings Button -->
+              <button id="programAudioSettingsBtn" class="px-4 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all duration-300 flex items-center space-x-2">
+                <i class="fas fa-music"></i>
+                <span>Audio</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Program Layout: Left content + Right summary (sticky) -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <!-- Left Column: Timer + Controls -->
+            <div class="md:col-span-2 space-y-6">
+              <!-- Timer Card -->
+              <div class="glass bg-white/10 rounded-3xl p-8 md:p-12 border border-white/20 shadow-2xl">
+                <div id="programTimerDisplay" class="text-center">
+                  <!-- Program timer content will be inserted here -->
+                </div>
+              </div>
+
+              <!-- Program Controls -->
+              <div class="glass bg-white/10 rounded-3xl p-6 border border-white/20 shadow-2xl">
+                <div class="text-center mb-5">
+                  <h3 class="text-2xl font-bold text-white mb-1">Program Controls</h3>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <!-- Prev -->
+                  <button id="programPrevBtn" class="py-5 px-4 bg-white/5 text-white font-semibold rounded-xl border border-white/10 hover:bg-white/10 transition-all duration-300 flex flex-col items-center justify-center space-y-2 shadow-md hover:shadow-lg">
+                    <i class="fas fa-backward text-xl"></i>
+                    <span class="text-sm">Prev (←)</span>
+                  </button>
+                  <!-- Play/Pause -->
+                  <button id="programPlayPauseBtn" class="py-5 px-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-300 flex flex-col items-center justify-center space-y-2 shadow-md hover:shadow-lg">
+                    <i class="fas fa-play text-2xl"></i>
+                    <span>Start (Space)</span>
+                  </button>
+                  <!-- Restart -->
+                  <button id="programRestartBtn" class="py-5 px-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold rounded-xl hover:from-blue-600 hover:to-purple-600 transition-all duration-300 flex flex-col items-center justify-center space-y-2 shadow-md hover:shadow-lg">
+                    <i class="fas fa-redo text-2xl"></i>
+                    <span>Restart</span>
+                  </button>
+                  <!-- Next -->
+                  <button id="programNextBtn" class="py-5 px-4 bg-white/5 text-white font-semibold rounded-xl border border-white/10 hover:bg-white/10 transition-all duration-300 flex flex-col items-center justify-center space-y-2 shadow-md hover:shadow-lg">
+                    <i class="fas fa-forward text-xl"></i>
+                    <span class="text-sm">Next (→)</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Program Skip Controls -->
+              <div class="glass bg-white/10 rounded-3xl p-6 border border-white/20 shadow-2xl">
+                <div class="text-center mb-5">
+                  <h3 class="text-2xl font-bold text-white mb-1">Program Skip Controls</h3>
+                  <p class="text-white/70">Exercises and rests</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <!-- Skip Current Exercise -->
+                  <button id="skipExerciseBtn" class="py-5 px-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-xl hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 flex flex-col items-center justify-center space-y-2 shadow-md hover:shadow-lg">
+                    <i class="fas fa-arrow-right text-xl"></i>
+                    <span class="text-sm">Skip Exercise</span>
+                  </button>
+                  <!-- Skip Exercise Rest -->
+                  <button id="skipExerciseRestBtn" class="py-5 px-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 flex flex-col items-center justify-center space-y-2 shadow-md hover:shadow-lg">
+                    <i class="fas fa-arrow-right text-xl"></i>
+                    <span class="text-sm">Program Rest</span>
+                  </button>
+                  <!-- Skip Set Rest (Program) -->
+                  <button id="skipSetRestBtnProgram" class="py-5 px-4 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold rounded-xl hover:from-indigo-600 hover:to-blue-600 transition-all duration-300 flex flex-col items-center justify-center space-y-2 shadow-md hover:shadow-lg">
+                    <i class="fas fa-arrow-right text-xl"></i>
+                    <span class="text-sm">Set Rest</span>
+                  </button>
+                  <!-- Skip Current Set -->
+                  <button id="skipSetBtnProgram" class="py-5 px-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 flex flex-col items-center justify-center space-y-2 shadow-md hover:shadow-lg">
+                    <i class="fas fa-arrow-right text-xl"></i>
+                    <span class="text-sm">Skip Set</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Back to Program Button -->
+              <div class="text-center">
+                <button id="backToProgramBtn" class="py-4 px-8 bg-gradient-to-r from-gray-500 to-gray-600 text-white font-bold rounded-xl hover:from-gray-600 hover:to-gray-700 transition-all duration-300 flex items-center justify-center space-x-2 mx-auto shadow-lg hover:shadow-xl transform hover:scale-105">
+                  <i class="fas fa-arrow-left mr-2"></i>
+                  <span>Back to Program Page</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Column: Summary (Sticky) -->
+            <div class="md:col-span-1 sticky top-6 h-fit glass bg-white/10 rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl" id="programSummaryWrapper">
+              <div id="programSummaryPanel" class="space-y-4">
+                <!-- Summary content will be inserted by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timer Section -->
+      <div id="timerSection" class="page hidden">
+        <div class="max-w-6xl mx-auto">
+          <!-- Timer Controls -->
+          <div class="flex justify-between items-center mb-8">
+            <button id="backToExercise" class="text-white/70 hover:text-white transition-colors">
+              <i class="fas fa-arrow-left text-3xl"></i>
+            </button>
+            
+            <div class="flex items-center space-x-4">
+              <!-- Settings Button -->
+              <button id="timerSettingsBtn" class="px-6 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all duration-300 flex items-center space-x-2">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+              </button>
+              
+              <!-- Timer Status -->
+              <div id="timerStatus" class="px-6 py-3 bg-white/10 text-white rounded-xl">
+                <span id="currentPosition">Set 1 - Rep 1</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Timer Display -->
+          <div class="glass bg-white/10 rounded-3xl p-12 border border-white/20 shadow-2xl mb-8">
+            <div id="timerDisplay" class="text-center">
+              <!-- Timer content will be inserted here -->
+            </div>
+          </div>
+          
+          <!-- Basic Controls -->
+          <div class="glass bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl mb-6">
+            <div class="text-center mb-6">
+              <h3 class="text-2xl font-bold text-white mb-2">Basic Controls</h3>
+              <p class="text-white/70">Start, stop, and reset the timer</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- Play/Pause Button -->
+              <button id="playPauseBtn" class="py-8 px-6 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-2xl hover:from-green-600 hover:to-emerald-600 transition-all duration-300 flex flex-col items-center justify-center space-y-3 shadow-lg hover:shadow-xl transform hover:scale-105">
+                <i class="fas fa-play text-3xl"></i>
+                <span class="text-lg">Start</span>
+              </button>
+              
+              <!-- Stop Button -->
+              <button id="stopBtn" class="py-8 px-6 bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold rounded-2xl hover:from-red-600 hover:to-pink-600 transition-all duration-300 flex flex-col items-center justify-center space-y-3 shadow-lg hover:shadow-xl transform hover:scale-105">
+                <i class="fas fa-stop text-3xl"></i>
+                <span class="text-lg">Stop</span>
+              </button>
+              
+              <!-- Restart Button -->
+              <button id="restartBtn" class="py-8 px-6 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold rounded-2xl hover:from-blue-600 hover:to-purple-600 transition-all duration-300 flex flex-col items-center justify-center space-y-3 shadow-lg hover:shadow-xl transform hover:scale-105">
+                <i class="fas fa-redo text-3xl"></i>
+                <span class="text-lg">Restart</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Skip Controls -->
+          <div class="glass bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl mb-6">
+            <div class="text-center mb-6">
+              <h3 class="text-2xl font-bold text-white mb-2">Skip Controls</h3>
+              <p class="text-white/70">Skip moves, reps, sets or rests</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <!-- Skip Current Move -->
+              <button id="skipMoveBtn" class="py-6 px-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-2xl hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 flex flex-col items-center justify-center space-y-2 shadow-lg hover:shadow-xl transform hover:scale-105">
+                <i class="fas fa-step-forward text-2xl"></i>
+                <span class="text-sm">Skip Move</span>
+                <span class="text-xs text-white/80">Jump forward by duration</span>
+              </button>
+              
+              <!-- Skip to Next Rep -->
+              <button id="skipRepBtn" class="py-6 px-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-2xl hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 flex flex-col items-center justify-center space-y-2 shadow-lg hover:shadow-xl transform hover:scale-105">
+                <i class="fas fa-forward text-2xl"></i>
+                <span class="text-sm">Skip Rep</span>
+                <span class="text-xs text-white/80">Skip current rep</span>
+              </button>
+              
+              <!-- Skip to Next Set -->
+              <button id="skipSetBtn" class="py-6 px-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-2xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 flex flex-col items-center justify-center space-y-2 shadow-lg hover:shadow-xl transform hover:scale-105">
+                <i class="fas fa-fast-forward text-2xl"></i>
+                <span class="text-sm">Skip Set</span>
+                <span class="text-xs text-white/80">Skip current set</span>
+              </button>
+              
+              <!-- Skip Set Rest -->
+              <button id="skipSetRestBtn" class="py-6 px-4 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold rounded-2xl hover:from-indigo-600 hover:to-blue-600 transition-all duration-300 flex flex-col items-center justify-center space-y-2 shadow-lg hover:shadow-xl transform hover:scale-105">
+                <i class="fas fa-skip-forward text-2xl"></i>
+                <span class="text-sm">Skip Set Rest</span>
+                <span class="text-xs text-white/80">Skip the rest</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Back to Exercise Button -->
+          <div class="text-center">
+            <button id="backToExerciseBtn" class="py-4 px-8 bg-gradient-to-r from-gray-500 to-gray-600 text-white font-bold rounded-xl hover:from-gray-600 hover:to-gray-700 transition-all duration-300 flex items-center justify-center space-x-2 mx-auto shadow-lg hover:shadow-xl transform hover:scale-105">
+              <i class="fas fa-arrow-left mr-2"></i>
+              <span>Back to Exercise Page</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Timer Settings Modal -->
+      <div id="timerSettingsModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+          <div class="glass bg-white/20 rounded-3xl p-8 border border-white/20 shadow-2xl max-w-2xl w-full">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-3xl font-bold text-white">Timer Settings</h3>
+              <button id="closeSettingsBtn" class="text-white/70 hover:text-white transition-colors">
+                <i class="fas fa-times text-2xl"></i>
+              </button>
+            </div>
+            
+            <div class="space-y-6">
+              <!-- Audio Settings -->
+              <div>
+                <h4 class="text-xl font-bold text-white mb-4 flex items-center">
+                  <i class="fas fa-volume-up text-blue-400 mr-3"></i>Audio Settings
+                </h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <!-- Move End Sound -->
+                  <div class="space-y-2">
+                    <label class="text-white font-semibold">Move End Sound</label>
+                    <div class="flex space-x-2">
+                      <select id="moveEndSound" class="flex-1 px-4 py-3 rounded-xl border-2 border-blue-300/50 bg-white/20 text-white focus:border-blue-400 focus:bg-white/30 transition-all duration-300">
+                        <option value="beep">Beep</option>
+                        <option value="bell">Bell</option>
+                        <option value="chime">Chime</option>
+                        <option value="whistle">Whistle</option>
+                        <option value="gong">Gong</option>
+                        <option value="buzz">Buzz</option>
+                        <option value="cheer">Cheer</option>
+                        <option value="motivation">Motivation</option>
+                        <option value="energy">Energy</option>
+                        <option value="success">Success</option>
+                      </select>
+                      <button class="preview-sound-btn px-4 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all duration-300" data-sound="moveEndSound">
+                        <i class="fas fa-play"></i>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <!-- Rest End Sound -->
+                  <div class="space-y-2">
+                    <label class="text-white font-semibold">Rest End Sound</label>
+                    <div class="flex space-x-2">
+                      <select id="restEndSound" class="flex-1 px-4 py-3 rounded-xl border-2 border-green-300/50 bg-white/20 text-white focus:border-green-400 focus:bg-white/30 transition-all duration-300">
+                        <option value="beep">Beep</option>
+                        <option value="bell">Bell</option>
+                        <option value="chime">Chime</option>
+                        <option value="whistle">Whistle</option>
+                        <option value="gong">Gong</option>
+                        <option value="buzz">Buzz</option>
+                        <option value="cheer">Cheer</option>
+                        <option value="motivation">Motivation</option>
+                        <option value="energy">Energy</option>
+                        <option value="success">Success</option>
+                      </select>
+                      <button class="preview-sound-btn px-4 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all duration-300" data-sound="restEndSound">
+                        <i class="fas fa-play"></i>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <!-- Set End Sound -->
+                  <div class="space-y-2">
+                    <label class="text-white font-semibold">Set End Sound</label>
+                    <div class="flex space-x-2">
+                      <select id="setEndSound" class="flex-1 px-4 py-3 rounded-xl border-2 border-yellow-300/50 bg-white/20 text-white focus:border-yellow-400 focus:bg-white/30 transition-all duration-300">
+                        <option value="beep">Beep</option>
+                        <option value="bell">Bell</option>
+                        <option value="chime">Chime</option>
+                        <option value="whistle">Whistle</option>
+                        <option value="gong">Gong</option>
+                        <option value="buzz">Buzz</option>
+                        <option value="cheer">Cheer</option>
+                        <option value="motivation">Motivation</option>
+                        <option value="energy">Energy</option>
+                        <option value="success">Success</option>
+                      </select>
+                      <button class="preview-sound-btn px-4 py-3 bg-yellow-500 text-white rounded-xl hover:bg-yellow-600 transition-all duration-300" data-sound="setEndSound">
+                        <i class="fas fa-play"></i>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <!-- Exercise End Sound -->
+                  <div class="space-y-2">
+                    <label class="text-white font-semibold">Exercise End Sound</label>
+                    <div class="flex space-x-2">
+                      <select id="exerciseEndSound" class="flex-1 px-4 py-3 rounded-xl border-2 border-red-300/50 bg-white/20 text-white focus:border-red-400 focus:bg-white/30 transition-all duration-300">
+                        <option value="beep">Beep</option>
+                        <option value="bell">Bell</option>
+                        <option value="chime">Chime</option>
+                        <option value="whistle">Whistle</option>
+                        <option value="gong">Gong</option>
+                        <option value="buzz">Buzz</option>
+                        <option value="cheer">Cheer</option>
+                        <option value="motivation">Motivation</option>
+                        <option value="energy">Energy</option>
+                        <option value="success">Success</option>
+                      </select>
+                      <button class="preview-sound-btn px-4 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all duration-300" data-sound="exerciseEndSound">
+                        <i class="fas fa-play"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+
+              
+              <!-- Save Button -->
+              <div class="text-center">
+                <button id="saveAudioSettingsBtn" class="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-300">
+                  <i class="fas fa-save mr-2"></i>Save Settings
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Program Audio Settings Modal -->
+      <div id="programAudioSettingsModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+          <div class="glass bg-white/20 rounded-3xl p-8 border border-white/20 shadow-2xl max-w-2xl w-full">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-3xl font-bold text-white">Program Audio Settings</h3>
+              <button id="closeProgramAudioSettingsBtn" class="text-white/70 hover:text-white transition-colors">
+                <i class="fas fa-times text-2xl"></i>
+              </button>
+            </div>
+            <div class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                  <label class="text-white font-semibold">Move End Sound</label>
+                  <div class="flex space-x-2">
+                    <select id="program_moveEndSound" class="flex-1 px-4 py-3 rounded-xl border-2 border-blue-300/50 bg-white/20 text-white focus:border-blue-400 focus:bg-white/30 transition-all duration-300"></select>
+                    <button class="program-preview-sound-btn px-4 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all duration-300" data-target="program_moveEndSound">
+                      <i class="fas fa-play"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="space-y-2">
+                  <label class="text-white font-semibold">Rest End Sound</label>
+                  <div class="flex space-x-2">
+                    <select id="program_restEndSound" class="flex-1 px-4 py-3 rounded-xl border-2 border-green-300/50 bg-white/20 text-white focus:border-green-400 focus:bg-white/30 transition-all duration-300"></select>
+                    <button class="program-preview-sound-btn px-4 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all duration-300" data-target="program_restEndSound">
+                      <i class="fas fa-play"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="space-y-2">
+                  <label class="text-white font-semibold">Set End Sound</label>
+                  <div class="flex space-x-2">
+                    <select id="program_setEndSound" class="flex-1 px-4 py-3 rounded-xl border-2 border-yellow-300/50 bg-white/20 text-white focus:border-yellow-400 focus:bg-white/30 transition-all duration-300"></select>
+                    <button class="program-preview-sound-btn px-4 py-3 bg-yellow-500 text-white rounded-xl hover:bg-yellow-600 transition-all duration-300" data-target="program_setEndSound">
+                      <i class="fas fa-play"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="space-y-2">
+                  <label class="text-white font-semibold">Exercise End Sound</label>
+                  <div class="flex space-x-2">
+                    <select id="program_exerciseEndSound" class="flex-1 px-4 py-3 rounded-xl border-2 border-red-300/50 bg-white/20 text-white focus:border-red-400 focus:bg-white/30 transition-all duration-300"></select>
+                    <button class="program-preview-sound-btn px-4 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all duration-300" data-target="program_exerciseEndSound">
+                      <i class="fas fa-play"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center">
+                <button id="saveProgramAudioSettingsBtn" class="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-300">
+                  <i class="fas fa-save mr-2"></i>Save Settings
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rest Edit Modal -->
+    <div id="restEditModal" class="rest-edit-modal">
+      <div class="rest-edit-content">
+        <h3>Edit Rest Duration</h3>
+        <input type="text" id="restEditInput" class="rest-edit-input" placeholder="e.g., 1 minute, 30 seconds, 1 min, 30 sec">
+        <div class="rest-edit-buttons">
+          <button id="restEditSave" class="rest-edit-btn rest-edit-save">
+            <i class="fas fa-save mr-2"></i>Save
+          </button>
+          <button id="restEditCancel" class="rest-edit-btn rest-edit-cancel">
+            <i class="fas fa-times mr-2"></i>Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/utils.js"></script>
+    <script src="js/programs.js"></script>
+    <script src="js/exercises.js"></script>
+    <script src="js/timer.js"></script>
+    <script src="js/program-timer.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/events.js"></script>
+  </body>
+</html>
