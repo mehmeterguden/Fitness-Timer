@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('saveExercise').addEventListener('click', saveExercise);
     document.getElementById('startExercise').addEventListener('click', startExercise);
     
+    // Add Exercise Toggle
+    document.getElementById('addExerciseToggleBtn').addEventListener('click', toggleAddExerciseSection);
+    
     // Navigation
     document.getElementById('backToProgram').addEventListener('click', backToProgram);
     document.getElementById('backToHome').addEventListener('click', backToHome);
@@ -680,6 +683,35 @@ function backToProgramFromTimer() {
     }
 }
 
+// Toggle Add Exercise Section
+function toggleAddExerciseSection() {
+    const content = document.getElementById('addExerciseContent');
+    const chevron = document.getElementById('addExerciseChevron');
+    const status = document.getElementById('addExerciseStatus');
+    const container = document.getElementById('addExerciseContainer');
+    
+    if (content.classList.contains('expanded')) {
+        // Collapse
+        content.classList.remove('expanded');
+        chevron.classList.remove('rotated');
+        status.classList.remove('expanded');
+        status.textContent = 'Click to expand';
+        container.classList.remove('expanded');
+    } else {
+        // Expand
+        content.classList.add('expanded');
+        chevron.classList.add('rotated');
+        status.classList.add('expanded');
+        status.textContent = 'Click to collapse';
+        container.classList.add('expanded');
+        
+        // Focus on input when expanded
+        setTimeout(() => {
+            document.getElementById('exerciseNameInput').focus();
+        }, 400);
+    }
+}
+
 // Make functions globally available
 window.openExerciseDetail = openExerciseDetail;
 window.loadProgram = loadProgram;
@@ -694,4 +726,5 @@ window.backToProgramFromTimer = backToProgramFromTimer;
 window.initRestDurationOptions = initRestDurationOptions;
 window.toggleExerciseFlow = toggleExerciseFlow;
 window.toggleProgramsDropdown = toggleProgramsDropdown;
-window.toggleProgramsDropdownProgram = toggleProgramsDropdownProgram; 
+window.toggleProgramsDropdownProgram = toggleProgramsDropdownProgram;
+window.toggleAddExerciseSection = toggleAddExerciseSection; 
