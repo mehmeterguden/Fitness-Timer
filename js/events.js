@@ -10,6 +10,11 @@ document.addEventListener('DOMContentLoaded', function() {
     loadColorSettings();
     renderProgramsDropdown();
     
+    // Ensure window.allPrograms is synced
+    if (typeof allPrograms !== 'undefined') {
+        window.allPrograms = allPrograms;
+    }
+    
     // Program creation
     document.getElementById('createProgramBtn').addEventListener('click', createProgram);
     

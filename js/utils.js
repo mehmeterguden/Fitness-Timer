@@ -2,7 +2,7 @@
 // UTILITY FUNCTIONS
 // ========================================
 
-// Storage Management (using localStorage)
+// Storage Management (using localStorage only)
 function setCookie(name, value, days) {
     localStorage.setItem(name, value);
 }

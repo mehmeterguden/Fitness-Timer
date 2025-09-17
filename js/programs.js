@@ -4,22 +4,42 @@
 
 // Global Variables
 let allPrograms = [];
+window.allPrograms = allPrograms;
 
 // Load all programs from storage
 function loadAllPrograms() {
-    const data = getCookie('allPrograms');
+    const data = localStorage.getItem('allPrograms');
+    
     if (data) {
         try {
             allPrograms = JSON.parse(data);
-        } catch {
+            window.allPrograms = allPrograms;
+        } catch (error) {
+            console.error('Error parsing programs:', error);
             allPrograms = [];
+            window.allPrograms = allPrograms;
         }
+    } else {
+        allPrograms = [];
+        window.allPrograms = allPrograms;
+    }
+    
+    // Also update settingsPrograms if it exists
+    if (typeof window.settingsPrograms !== 'undefined') {
+        window.settingsPrograms = allPrograms;
     }
 }
 
 // Save all programs to storage
 function saveAllPrograms() {
-    setCookie('allPrograms', JSON.stringify(allPrograms), 30);
+    const data = JSON.stringify(allPrograms);
+    localStorage.setItem('allPrograms', data);
+    window.allPrograms = allPrograms;
+    
+    // Also update settingsPrograms if it exists
+    if (typeof window.settingsPrograms !== 'undefined') {
+        window.settingsPrograms = allPrograms;
+    }
 }
 
 // Create new program
@@ -44,6 +64,7 @@ function createProgram() {
     };
 
     allPrograms.push(newProgram);
+    window.allPrograms = allPrograms;
     saveAllPrograms();
     
     // Set as current program
@@ -63,23 +84,49 @@ function createProgram() {
 
 // Load program
 function loadProgram(programId) {
-    const program = allPrograms.find(p => p.id === programId);
+    console.log('=== loadProgram START ===');
+    console.log('programId received:', programId, 'type:', typeof programId);
+    
+    // First try to reload programs from localStorage
+    loadAllPrograms();
+    
+    const programs = window.allPrograms || allPrograms;
+    console.log('programs array after reload:', programs);
+    console.log('programs length after reload:', programs.length);
+    
+    // For string IDs, don't convert to number - keep as string
+    const program = programs.find(p => p.id === programId);
+    console.log('found program:', program);
+    
     if (program) {
+        console.log('Program found, loading...');
         currentProgram = program;
         document.getElementById('currentProgram').textContent = program.name;
         showProgramHeader();
         showPage('programPage');
         renderExercises(); // This now only renders the order list
         showNotification(`${program.name} loaded!`, 'success');
+        console.log('Program loaded successfully');
+    } else {
+        console.log('Program not found!');
+        console.log('Available program IDs:', programs.map(p => p.id));
+        console.log('Looking for ID:', programId);
     }
+    
+    console.log('=== loadProgram END ===');
 }
 
 // Delete program
 function deleteProgram(programId) {
-    const program = allPrograms.find(p => p.id === programId);
+    // First try to reload programs from localStorage
+    loadAllPrograms();
+    
+    const programs = window.allPrograms || allPrograms;
+    const program = programs.find(p => p.id === programId);
     if (program) {
         if (confirm(`Are you sure you want to delete ${program.name}?`)) {
             allPrograms = allPrograms.filter(p => p.id !== programId);
+            window.allPrograms = allPrograms;
             saveAllPrograms();
             renderProgramsDropdown();
             
@@ -131,10 +178,18 @@ function toggleProgramsDropdownProgram() {
 
 // Render programs dropdown
 function renderProgramsDropdown() {
+    console.log('=== renderProgramsDropdown START ===');
+    
     const container = document.getElementById('programsList');
     const noProgramsMessage = document.getElementById('noProgramsMessage');
     
-    if (allPrograms.length === 0) {
+    // Use window.allPrograms if available, fallback to allPrograms
+    const programs = window.allPrograms || allPrograms;
+    console.log('programs to render:', programs);
+    console.log('programs length:', programs.length);
+    
+    if (programs.length === 0) {
+        console.log('No programs to render');
         container.innerHTML = '';
         noProgramsMessage.classList.remove('hidden');
         return;
@@ -143,7 +198,9 @@ function renderProgramsDropdown() {
     noProgramsMessage.classList.add('hidden');
     container.innerHTML = '';
     
-    allPrograms.forEach(program => {
+    programs.forEach((program, index) => {
+        console.log(`Rendering program ${index}:`, program);
+        console.log(`Program ID: ${program.id}, type: ${typeof program.id}`);
         const div = document.createElement('div');
         div.className = 'flex items-center justify-between p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-all duration-300';
         div.innerHTML = `
@@ -157,16 +214,18 @@ function renderProgramsDropdown() {
                 </div>
             </div>
             <div class="flex items-center space-x-2">
-                <button onclick="loadProgram(${program.id})" class="px-3 py-1 bg-blue-500 text-white text-xs rounded-lg hover:bg-blue-600 transition-all duration-300">
+                <button onclick="loadProgram('${program.id}')" class="px-3 py-1 bg-blue-500 text-white text-xs rounded-lg hover:bg-blue-600 transition-all duration-300">
                     <i class="fas fa-play mr-1"></i>Open
                 </button>
-                <button onclick="deleteProgram(${program.id})" class="px-3 py-1 bg-red-500 text-white text-xs rounded-lg hover:bg-red-600 transition-all duration-300">
+                <button onclick="deleteProgram('${program.id}')" class="px-3 py-1 bg-red-500 text-white text-xs rounded-lg hover:bg-red-600 transition-all duration-300">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
         `;
         container.appendChild(div);
     });
+    
+    console.log('=== renderProgramsDropdown END ===');
 }
 
 // Render programs dropdown - Program page
@@ -174,7 +233,10 @@ function renderProgramsDropdownProgram() {
     const container = document.getElementById('programsListProgram');
     const noProgramsMessage = document.getElementById('noProgramsMessageProgram');
     
-    if (allPrograms.length === 0) {
+    // Use window.allPrograms if available, fallback to allPrograms
+    const programs = window.allPrograms || allPrograms;
+    
+    if (programs.length === 0) {
         container.innerHTML = '';
         noProgramsMessage.classList.remove('hidden');
         return;
@@ -183,7 +245,7 @@ function renderProgramsDropdownProgram() {
     noProgramsMessage.classList.add('hidden');
     container.innerHTML = '';
     
-    allPrograms.forEach(program => {
+    programs.forEach(program => {
         const div = document.createElement('div');
         div.className = 'flex items-center justify-between p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-all duration-300';
         div.innerHTML = `
@@ -197,10 +259,10 @@ function renderProgramsDropdownProgram() {
                 </div>
             </div>
             <div class="flex items-center space-x-2">
-                <button onclick="loadProgram(${program.id})" class="px-3 py-1 bg-blue-500 text-white text-xs rounded-lg hover:bg-blue-600 transition-all duration-300">
+                <button onclick="loadProgram('${program.id}')" class="px-3 py-1 bg-blue-500 text-white text-xs rounded-lg hover:bg-blue-600 transition-all duration-300">
                     <i class="fas fa-play mr-1"></i>Open
                 </button>
-                <button onclick="deleteProgram(${program.id})" class="px-3 py-1 bg-red-500 text-white text-xs rounded-lg hover:bg-red-600 transition-all duration-300">
+                <button onclick="deleteProgram('${program.id}')" class="px-3 py-1 bg-red-500 text-white text-xs rounded-lg hover:bg-red-600 transition-all duration-300">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
