@@ -11,11 +11,13 @@ window.settingsPrograms = settingsPrograms;
 
 // Initialize settings page
 function initSettings() {
+    console.log('initSettings called');
     loadAllPrograms();
     updateExportStats();
     setupSettingsEventListeners();
     setupFileUpload();
     renderProgramSelection();
+    console.log('initSettings completed');
 }
 
 // Load all programs
@@ -63,6 +65,8 @@ function updateExportStats() {
 
 // Setup event listeners
 function setupSettingsEventListeners() {
+    console.log('setupSettingsEventListeners called');
+    
     // Export button
     document.getElementById('exportBtn').addEventListener('click', exportSelectedPrograms);
     
@@ -78,18 +82,36 @@ function setupSettingsEventListeners() {
     document.getElementById('cancelImportBtn').addEventListener('click', cancelImport);
     
     // Data management buttons
-    document.getElementById('viewDataBtn').addEventListener('click', showDataViewer);
-    document.getElementById('clearAllBtn').addEventListener('click', clearAllData);
-    document.getElementById('resetSettingsBtn').addEventListener('click', resetSettings);
-    document.getElementById('backupBtn').addEventListener('click', createBackup);
+    const viewDataBtn = document.getElementById('viewDataBtn');
+    const clearAllBtn = document.getElementById('clearAllBtn');
+    const resetSettingsBtn = document.getElementById('resetSettingsBtn');
+    const backupBtn = document.getElementById('backupBtn');
+    
+    console.log('Data management buttons found:', {
+        viewDataBtn: !!viewDataBtn,
+        clearAllBtn: !!clearAllBtn,
+        resetSettingsBtn: !!resetSettingsBtn,
+        backupBtn: !!backupBtn
+    });
+    
+    if (viewDataBtn) viewDataBtn.addEventListener('click', showDataViewer);
+    if (clearAllBtn) clearAllBtn.addEventListener('click', clearAllData);
+    if (resetSettingsBtn) resetSettingsBtn.addEventListener('click', resetSettings);
+    if (backupBtn) backupBtn.addEventListener('click', createBackup);
     
     // Data viewer modal
-    document.getElementById('closeDataViewer').addEventListener('click', hideDataViewer);
+    const closeDataViewer = document.getElementById('closeDataViewer');
+    if (closeDataViewer) closeDataViewer.addEventListener('click', hideDataViewer);
     
     // Back button
-    document.getElementById('backToHomeFromSettings').addEventListener('click', () => {
-        showPage('homePage');
-    });
+    const backBtn = document.getElementById('backToHomeFromSettings');
+    if (backBtn) {
+        backBtn.addEventListener('click', () => {
+            showPage('homePage');
+        });
+    }
+    
+    console.log('setupSettingsEventListeners completed');
 }
 
 // Setup file upload functionality
@@ -758,7 +780,9 @@ document.addEventListener('DOMContentLoaded', function() {
 // Override showPage to initialize settings when needed
 const originalShowPage = window.showPage;
 window.showPage = function(pageId) {
-    originalShowPage(pageId);
+    if (originalShowPage) {
+        originalShowPage(pageId);
+    }
     
     // Initialize settings if settings page is shown
     if (pageId === 'settingsPage') {
@@ -768,3 +792,10 @@ window.showPage = function(pageId) {
 
 // Make functions globally available
 window.initSettings = initSettings;
+window.showDataViewer = showDataViewer;
+window.hideDataViewer = hideDataViewer;
+window.clearAllData = clearAllData;
+window.resetSettings = resetSettings;
+window.createBackup = createBackup;
+window.copyToClipboard = copyToClipboard;
+window.deleteDataItem = deleteDataItem;
