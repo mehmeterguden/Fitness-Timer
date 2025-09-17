@@ -84,20 +84,14 @@ function setupSettingsEventListeners() {
     // Data management buttons
     const viewDataBtn = document.getElementById('viewDataBtn');
     const clearAllBtn = document.getElementById('clearAllBtn');
-    const resetSettingsBtn = document.getElementById('resetSettingsBtn');
-    const backupBtn = document.getElementById('backupBtn');
     
     console.log('Data management buttons found:', {
         viewDataBtn: !!viewDataBtn,
-        clearAllBtn: !!clearAllBtn,
-        resetSettingsBtn: !!resetSettingsBtn,
-        backupBtn: !!backupBtn
+        clearAllBtn: !!clearAllBtn
     });
     
     if (viewDataBtn) viewDataBtn.addEventListener('click', showDataViewer);
     if (clearAllBtn) clearAllBtn.addEventListener('click', clearAllData);
-    if (resetSettingsBtn) resetSettingsBtn.addEventListener('click', resetSettings);
-    if (backupBtn) backupBtn.addEventListener('click', createBackup);
     
     // Data viewer modal
     const closeDataViewer = document.getElementById('closeDataViewer');
@@ -605,66 +599,6 @@ function clearAllData() {
     }
 }
 
-// Reset settings
-function resetSettings() {
-    if (confirm('Are you sure you want to reset all settings to default?')) {
-        try {
-            // Reset audio settings
-            const defaultAudioSettings = {
-                moveEnd: 'beep',
-                restEnd: 'beep',
-                setEnd: 'beep',
-                exerciseEnd: 'beep'
-            };
-            localStorage.setItem('audioSettings', JSON.stringify(defaultAudioSettings));
-            
-            // Reset color settings
-            const defaultColorSettings = {
-                moveColor: 'blue',
-                restColor: 'green',
-                setRestColor: 'orange'
-            };
-            localStorage.setItem('colorSettings', JSON.stringify(defaultColorSettings));
-            
-            showNotification('Settings reset to default!', 'success');
-            
-        } catch (error) {
-            console.error('Reset settings error:', error);
-            showNotification('Failed to reset settings!', 'error');
-        }
-    }
-}
-
-// Create backup
-function createBackup() {
-    try {
-        const allData = {
-            programs: JSON.parse(localStorage.getItem('allPrograms')) || [],
-            workoutData: JSON.parse(localStorage.getItem('workoutData')) || {},
-            audioSettings: JSON.parse(localStorage.getItem('audioSettings')) || {},
-            colorSettings: JSON.parse(localStorage.getItem('colorSettings')) || {},
-            backupDate: new Date().toISOString(),
-            version: '1.0'
-        };
-        
-        const dataStr = JSON.stringify(allData, null, 2);
-        const dataBlob = new Blob([dataStr], { type: 'application/json' });
-        
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(dataBlob);
-        link.download = `fitness-backup-${new Date().toISOString().split('T')[0]}.json`;
-        
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        showNotification('Backup created successfully!', 'success');
-        
-    } catch (error) {
-        console.error('Backup error:', error);
-        showNotification('Backup failed! Please try again.', 'error');
-    }
-}
 
 // Show data viewer modal
 function showDataViewer() {
@@ -795,7 +729,5 @@ window.initSettings = initSettings;
 window.showDataViewer = showDataViewer;
 window.hideDataViewer = hideDataViewer;
 window.clearAllData = clearAllData;
-window.resetSettings = resetSettings;
-window.createBackup = createBackup;
 window.copyToClipboard = copyToClipboard;
 window.deleteDataItem = deleteDataItem;

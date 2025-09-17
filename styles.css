@@ -1410,6 +1410,8 @@ button, input, select, textarea {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
     opacity: 0;
     transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .data-management-card:hover::before {
@@ -1420,6 +1422,258 @@ button, input, select, textarea {
     transform: translateY(-4px) scale(1.02);
     box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
     border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Data Management Buttons */
+.data-management-card button {
+    position: relative;
+    z-index: 2;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+/* Premium Data Management Cards */
+.data-management-card-premium {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.data-management-card-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.data-management-card-premium:hover::before {
+    opacity: 1;
+}
+
+.data-management-card-premium:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    padding: 2rem 2rem 1rem 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.icon-container {
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.icon-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+    border-radius: 20px;
+}
+
+.icon-container i {
+    font-size: 1.5rem;
+    color: white;
+    position: relative;
+    z-index: 1;
+}
+
+.view-icon {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.clear-icon {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+}
+
+.card-title h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 0.25rem 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-title p {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+}
+
+.card-content {
+    padding: 0 2rem 1rem 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+}
+
+.feature-item i {
+    font-size: 0.875rem;
+    width: 16px;
+    text-align: center;
+}
+
+.feature-item i.fa-check-circle {
+    color: #10b981;
+}
+
+.feature-item i.fa-exclamation-triangle {
+    color: #f59e0b;
+}
+
+.feature-item span {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+.card-footer {
+    padding: 1rem 2rem 2rem 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.btn-premium {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.btn-premium:hover::before {
+    left: 100%;
+}
+
+.btn-premium i {
+    font-size: 1.125rem;
+    transition: transform 0.3s ease;
+}
+
+.btn-premium:hover i {
+    transform: scale(1.1);
+}
+
+.view-btn {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.view-btn:hover {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(59, 130, 246, 0.4);
+}
+
+.clear-btn {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+}
+
+.clear-btn:hover {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(239, 68, 68, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .data-management-card-premium {
+        margin-bottom: 1.5rem;
+    }
+    
+    .card-header {
+        padding: 1.5rem 1.5rem 1rem 1.5rem;
+    }
+    
+    .card-content {
+        padding: 0 1.5rem 1rem 1.5rem;
+    }
+    
+    .card-footer {
+        padding: 1rem 1.5rem 1.5rem 1.5rem;
+    }
+    
+    .icon-container {
+        width: 56px;
+        height: 56px;
+        margin-right: 1rem;
+    }
+    
+    .icon-container i {
+        font-size: 1.25rem;
+    }
+    
+    .card-title h3 {
+        font-size: 1.25rem;
+    }
 }
 
 /* Data Viewer Styles */

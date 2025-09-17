@@ -552,53 +552,75 @@
                 <p class="text-white/70">Manage your local data and storage</p>
               </div>
               
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                 <!-- View Data -->
-                <div class="data-management-card text-center">
-                  <div class="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mb-3">
-                    <i class="fas fa-eye text-white"></i>
+                <div class="data-management-card-premium">
+                  <div class="card-header">
+                    <div class="icon-container view-icon">
+                      <i class="fas fa-database"></i>
+                    </div>
+                    <div class="card-title">
+                      <h3>View Data</h3>
+                      <p>Browse all stored data</p>
+                    </div>
                   </div>
-                  <h4 class="text-lg font-bold text-white mb-2">View Data</h4>
-                  <p class="text-white/70 text-sm mb-4">Browse all stored data</p>
-                  <button id="viewDataBtn" onclick="showDataViewer()" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold rounded-lg hover:from-blue-600 hover:to-cyan-600 transition-all duration-300">
-                    View Data
-                  </button>
+                  <div class="card-content">
+                    <div class="feature-list">
+                      <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>View localStorage data</span>
+                      </div>
+                      <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Copy & delete items</span>
+                      </div>
+                      <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Data statistics</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <button id="viewDataBtn" onclick="showDataViewer()" class="btn-premium view-btn">
+                      <i class="fas fa-eye"></i>
+                      <span>View Data</span>
+                    </button>
+                  </div>
                 </div>
                 
                 <!-- Clear All Data -->
-                <div class="data-management-card text-center">
-                  <div class="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-red-500 to-pink-500 rounded-full mb-3">
-                    <i class="fas fa-trash text-white"></i>
+                <div class="data-management-card-premium">
+                  <div class="card-header">
+                    <div class="icon-container clear-icon">
+                      <i class="fas fa-trash-alt"></i>
+                    </div>
+                    <div class="card-title">
+                      <h3>Clear All Data</h3>
+                      <p>Remove all programs and data</p>
+                    </div>
                   </div>
-                  <h4 class="text-lg font-bold text-white mb-2">Clear All Data</h4>
-                  <p class="text-white/70 text-sm mb-4">Remove all programs and data</p>
-                  <button id="clearAllBtn" onclick="clearAllData()" class="px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold rounded-lg hover:from-red-600 hover:to-pink-600 transition-all duration-300">
-                    Clear All
-                  </button>
-                </div>
-                
-                <!-- Reset Settings -->
-                <div class="data-management-card text-center">
-                  <div class="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full mb-3">
-                    <i class="fas fa-undo text-white"></i>
+                  <div class="card-content">
+                    <div class="feature-list">
+                      <div class="feature-item">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Delete all programs</span>
+                      </div>
+                      <div class="feature-item">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Clear workout history</span>
+                      </div>
+                      <div class="feature-item">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Reset all settings</span>
+                      </div>
+                    </div>
                   </div>
-                  <h4 class="text-lg font-bold text-white mb-2">Reset Settings</h4>
-                  <p class="text-white/70 text-sm mb-4">Reset to default settings</p>
-                  <button id="resetSettingsBtn" onclick="resetSettings()" class="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-lg hover:from-yellow-600 hover:to-orange-600 transition-all duration-300">
-                    Reset
-                  </button>
-                </div>
-                
-                <!-- Backup Data -->
-                <div class="data-management-card text-center">
-                  <div class="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full mb-3">
-                    <i class="fas fa-shield-alt text-white"></i>
+                  <div class="card-footer">
+                    <button id="clearAllBtn" onclick="clearAllData()" class="btn-premium clear-btn">
+                      <i class="fas fa-trash"></i>
+                      <span>Clear All</span>
+                    </button>
                   </div>
-                  <h4 class="text-lg font-bold text-white mb-2">Backup Data</h4>
-                  <p class="text-white/70 text-sm mb-4">Create automatic backup</p>
-                  <button id="backupBtn" onclick="createBackup()" class="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold rounded-lg hover:from-indigo-600 hover:to-purple-600 transition-all duration-300">
-                    Backup
-                  </button>
                 </div>
               </div>
             </div>
