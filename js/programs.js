@@ -84,36 +84,24 @@ function createProgram() {
 
 // Load program
 function loadProgram(programId) {
-    console.log('=== loadProgram START ===');
-    console.log('programId received:', programId, 'type:', typeof programId);
-    
     // First try to reload programs from localStorage
     loadAllPrograms();
     
     const programs = window.allPrograms || allPrograms;
-    console.log('programs array after reload:', programs);
-    console.log('programs length after reload:', programs.length);
     
     // For string IDs, don't convert to number - keep as string
     const program = programs.find(p => p.id === programId);
-    console.log('found program:', program);
     
     if (program) {
-        console.log('Program found, loading...');
         currentProgram = program;
         document.getElementById('currentProgram').textContent = program.name;
         showProgramHeader();
         showPage('programPage');
         renderExercises(); // This now only renders the order list
         showNotification(`${program.name} loaded!`, 'success');
-        console.log('Program loaded successfully');
     } else {
-        console.log('Program not found!');
-        console.log('Available program IDs:', programs.map(p => p.id));
-        console.log('Looking for ID:', programId);
+        showNotification('Program not found!', 'error');
     }
-    
-    console.log('=== loadProgram END ===');
 }
 
 // Delete program
@@ -178,18 +166,13 @@ function toggleProgramsDropdownProgram() {
 
 // Render programs dropdown
 function renderProgramsDropdown() {
-    console.log('=== renderProgramsDropdown START ===');
-    
     const container = document.getElementById('programsList');
     const noProgramsMessage = document.getElementById('noProgramsMessage');
     
     // Use window.allPrograms if available, fallback to allPrograms
     const programs = window.allPrograms || allPrograms;
-    console.log('programs to render:', programs);
-    console.log('programs length:', programs.length);
     
     if (programs.length === 0) {
-        console.log('No programs to render');
         container.innerHTML = '';
         noProgramsMessage.classList.remove('hidden');
         return;
@@ -199,8 +182,6 @@ function renderProgramsDropdown() {
     container.innerHTML = '';
     
     programs.forEach((program, index) => {
-        console.log(`Rendering program ${index}:`, program);
-        console.log(`Program ID: ${program.id}, type: ${typeof program.id}`);
         const div = document.createElement('div');
         div.className = 'flex items-center justify-between p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-all duration-300';
         div.innerHTML = `
@@ -224,8 +205,6 @@ function renderProgramsDropdown() {
         `;
         container.appendChild(div);
     });
-    
-    console.log('=== renderProgramsDropdown END ===');
 }
 
 // Render programs dropdown - Program page

@@ -78,9 +78,13 @@ function setupSettingsEventListeners() {
     document.getElementById('cancelImportBtn').addEventListener('click', cancelImport);
     
     // Data management buttons
+    document.getElementById('viewDataBtn').addEventListener('click', showDataViewer);
     document.getElementById('clearAllBtn').addEventListener('click', clearAllData);
     document.getElementById('resetSettingsBtn').addEventListener('click', resetSettings);
     document.getElementById('backupBtn').addEventListener('click', createBackup);
+    
+    // Data viewer modal
+    document.getElementById('closeDataViewer').addEventListener('click', hideDataViewer);
     
     // Back button
     document.getElementById('backToHomeFromSettings').addEventListener('click', () => {
@@ -613,7 +617,7 @@ function resetSettings() {
 function createBackup() {
     try {
         const allData = {
-            programs: JSON.parse(localStorage.getItem('programs')) || [],
+            programs: JSON.parse(localStorage.getItem('allPrograms')) || [],
             workoutData: JSON.parse(localStorage.getItem('workoutData')) || {},
             audioSettings: JSON.parse(localStorage.getItem('audioSettings')) || {},
             colorSettings: JSON.parse(localStorage.getItem('colorSettings')) || {},
@@ -637,6 +641,109 @@ function createBackup() {
     } catch (error) {
         console.error('Backup error:', error);
         showNotification('Backup failed! Please try again.', 'error');
+    }
+}
+
+// Show data viewer modal
+function showDataViewer() {
+    const modal = document.getElementById('dataViewerModal');
+    const content = document.getElementById('dataViewerContent');
+    
+    // Load all localStorage data
+    const allData = {};
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const value = localStorage.getItem(key);
+        allData[key] = value;
+    }
+    
+    // Calculate stats
+    const totalKeys = Object.keys(allData).length;
+    const totalSize = JSON.stringify(allData).length;
+    const totalSizeKB = Math.round(totalSize / 1024 * 100) / 100;
+    
+    // Render stats
+    content.innerHTML = `
+        <div class="data-stats">
+            <div class="data-stat">
+                <div class="data-stat-value">${totalKeys}</div>
+                <div class="data-stat-label">Total Keys</div>
+            </div>
+            <div class="data-stat">
+                <div class="data-stat-value">${totalSizeKB} KB</div>
+                <div class="data-stat-label">Total Size</div>
+            </div>
+            <div class="data-stat">
+                <div class="data-stat-value">${Object.keys(allData).filter(key => key.includes('Program')).length}</div>
+                <div class="data-stat-label">Program Keys</div>
+            </div>
+            <div class="data-stat">
+                <div class="data-stat-value">${Object.keys(allData).filter(key => key.includes('workout')).length}</div>
+                <div class="data-stat-label">Workout Keys</div>
+            </div>
+        </div>
+    `;
+    
+    // Render data items
+    Object.entries(allData).forEach(([key, value]) => {
+        const dataItem = document.createElement('div');
+        dataItem.className = 'data-item';
+        
+        const size = new Blob([value]).size;
+        const sizeKB = Math.round(size / 1024 * 100) / 100;
+        
+        let formattedValue = value;
+        try {
+            const parsed = JSON.parse(value);
+            formattedValue = JSON.stringify(parsed, null, 2);
+        } catch (e) {
+            // Keep as string if not JSON
+        }
+        
+        dataItem.innerHTML = `
+            <div class="data-item-header">
+                <h3 class="data-item-title">${key}</h3>
+                <span class="data-item-size">${sizeKB} KB</span>
+            </div>
+            <div class="data-item-content">${formattedValue}</div>
+            <div class="data-item-actions">
+                <button class="data-action-btn copy" onclick="copyToClipboard('${key}')">
+                    <i class="fas fa-copy mr-1"></i>Copy
+                </button>
+                <button class="data-action-btn delete" onclick="deleteDataItem('${key}')">
+                    <i class="fas fa-trash mr-1"></i>Delete
+                </button>
+            </div>
+        `;
+        
+        content.appendChild(dataItem);
+    });
+    
+    modal.classList.remove('hidden');
+}
+
+// Hide data viewer modal
+function hideDataViewer() {
+    const modal = document.getElementById('dataViewerModal');
+    modal.classList.add('hidden');
+}
+
+// Copy data to clipboard
+function copyToClipboard(key) {
+    const value = localStorage.getItem(key);
+    navigator.clipboard.writeText(value).then(() => {
+        showNotification(`Copied ${key} to clipboard!`, 'success');
+    }).catch(() => {
+        showNotification('Failed to copy to clipboard!', 'error');
+    });
+}
+
+// Delete data item
+function deleteDataItem(key) {
+    if (confirm(`Are you sure you want to delete "${key}"?`)) {
+        localStorage.removeItem(key);
+        showNotification(`Deleted ${key}`, 'success');
+        showDataViewer(); // Refresh the viewer
     }
 }
 
