@@ -337,6 +337,9 @@ function renderProgramsDropdown() {
     // Use window.allPrograms if available, fallback to allPrograms
     const programs = window.allPrograms || allPrograms;
     
+    // Update program count
+    updateProgramCount(programs.length);
+    
     if (programs.length === 0) {
         container.innerHTML = '';
         noProgramsMessage.classList.remove('hidden');
@@ -348,22 +351,22 @@ function renderProgramsDropdown() {
     
     programs.forEach((program, index) => {
         const div = document.createElement('div');
-        div.className = 'flex items-center justify-between p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-all duration-300';
+        div.className = 'flex items-center justify-between p-4 bg-gradient-to-r from-white/5 to-white/10 rounded-xl hover:from-white/10 hover:to-white/15 transition-all duration-300 border border-white/10 hover:border-white/20 group';
         div.innerHTML = `
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-dumbbell text-white text-sm"></i>
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-dumbbell text-white text-lg"></i>
                 </div>
                 <div>
-                    <div class="text-white font-semibold">${program.name}</div>
-                     <div class="text-white/60 text-xs">${program.exercises.length} exercise(s)</div>
+                    <div class="text-white font-bold text-lg">${program.name}</div>
+                    <div class="text-white/60 text-sm">${program.exercises ? program.exercises.length : 0} exercise(s)</div>
                 </div>
             </div>
             <div class="flex items-center space-x-2">
-                <button onclick="loadProgram('${program.id}')" class="px-3 py-1 bg-blue-500 text-white text-xs rounded-lg hover:bg-blue-600 transition-all duration-300">
-                    <i class="fas fa-play mr-1"></i>Open
+                <button onclick="loadProgram('${program.id}')" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                    <i class="fas fa-play mr-2"></i>Open
                 </button>
-                <button onclick="deleteProgram('${program.id}')" class="px-3 py-1 bg-red-500 text-white text-xs rounded-lg hover:bg-red-600 transition-all duration-300">
+                <button onclick="deleteProgram('${program.id}')" class="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
@@ -380,6 +383,9 @@ function renderProgramsDropdownProgram() {
     // Use window.allPrograms if available, fallback to allPrograms
     const programs = window.allPrograms || allPrograms;
     
+    // Update program count
+    updateProgramCountProgram(programs.length);
+    
     if (programs.length === 0) {
         container.innerHTML = '';
         noProgramsMessage.classList.remove('hidden');
@@ -391,26 +397,42 @@ function renderProgramsDropdownProgram() {
     
     programs.forEach(program => {
         const div = document.createElement('div');
-        div.className = 'flex items-center justify-between p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-all duration-300';
+        div.className = 'flex items-center justify-between p-4 bg-gradient-to-r from-white/5 to-white/10 rounded-xl hover:from-white/10 hover:to-white/15 transition-all duration-300 border border-white/10 hover:border-white/20 group';
         div.innerHTML = `
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-dumbbell text-white text-sm"></i>
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-dumbbell text-white text-lg"></i>
                 </div>
                 <div>
-                    <div class="text-white font-semibold">${program.name}</div>
-                     <div class="text-white/60 text-xs">${program.exercises.length} exercise(s)</div>
+                    <div class="text-white font-bold text-lg">${program.name}</div>
+                    <div class="text-white/60 text-sm">${program.exercises ? program.exercises.length : 0} exercise(s)</div>
                 </div>
             </div>
             <div class="flex items-center space-x-2">
-                <button onclick="loadProgram('${program.id}')" class="px-3 py-1 bg-blue-500 text-white text-xs rounded-lg hover:bg-blue-600 transition-all duration-300">
-                    <i class="fas fa-play mr-1"></i>Open
+                <button onclick="loadProgram('${program.id}')" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                    <i class="fas fa-play mr-2"></i>Open
                 </button>
-                <button onclick="deleteProgram('${program.id}')" class="px-3 py-1 bg-red-500 text-white text-xs rounded-lg hover:bg-red-600 transition-all duration-300">
+                <button onclick="deleteProgram('${program.id}')" class="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
         `;
         container.appendChild(div);
     });
+}
+
+// Update program count in header dropdown
+function updateProgramCount(count) {
+    const programCountElement = document.getElementById('programCount');
+    if (programCountElement) {
+        programCountElement.textContent = count;
+    }
+}
+
+// Update program count in program page dropdown
+function updateProgramCountProgram(count) {
+    const programCountElement = document.getElementById('programCountProgram');
+    if (programCountElement) {
+        programCountElement.textContent = count;
+    }
 } 
