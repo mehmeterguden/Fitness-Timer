@@ -76,24 +76,24 @@ function displayProgramsList() {
         
         programCard.innerHTML = `
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+                <div class="flex items-center space-x-4 flex-1 min-w-0">
+                    <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
                         <i class="fas fa-dumbbell text-white text-xl"></i>
                     </div>
-                    <div>
-                        <h3 class="text-xl font-bold text-white">${program.name}</h3>
-                        <p class="text-white/70">${program.exercises ? program.exercises.length : 0} exercises</p>
+                    <div class="min-w-0 flex-1">
+                        <h3 class="text-xl font-bold text-white truncate">${program.name}</h3>
+                        <p class="text-white/70 truncate">${program.exercises ? program.exercises.length : 0} exercises</p>
                     </div>
                 </div>
-                <div class="flex items-center space-x-3">
-                    <button onclick="startProgram(${index})" class="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg hover:from-green-600 hover:to-emerald-600 transition-all duration-300">
-                        <i class="fas fa-play mr-2"></i>Start
+                <div class="flex items-center space-x-2 flex-shrink-0 ml-4">
+                    <button onclick="startProgram(${index})" class="px-3 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-semibold rounded-lg hover:from-green-600 hover:to-emerald-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center whitespace-nowrap">
+                        <i class="fas fa-play mr-1 text-xs"></i>Start
                     </button>
-                    <button onclick="editProgram(${index})" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-300">
-                        <i class="fas fa-edit mr-2"></i>Edit
+                    <button onclick="editProgram(${index})" class="px-3 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-semibold rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center whitespace-nowrap">
+                        <i class="fas fa-edit mr-1 text-xs"></i>Edit
                     </button>
-                    <button onclick="deleteProgram(${index})" class="px-4 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-lg hover:from-red-600 hover:to-pink-600 transition-all duration-300">
-                        <i class="fas fa-trash mr-2"></i>Delete
+                    <button onclick="deleteProgram(${index})" class="px-3 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-semibold rounded-lg hover:from-red-600 hover:to-pink-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center whitespace-nowrap">
+                        <i class="fas fa-trash mr-1 text-xs"></i>Delete
                     </button>
                 </div>
             </div>
@@ -353,21 +353,21 @@ function renderProgramsDropdown() {
         const div = document.createElement('div');
         div.className = 'flex items-center justify-between p-4 bg-gradient-to-r from-white/5 to-white/10 rounded-xl hover:from-white/10 hover:to-white/15 transition-all duration-300 border border-white/10 hover:border-white/20 group';
         div.innerHTML = `
-            <div class="flex items-center space-x-4">
-                <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+            <div class="flex items-center space-x-4 flex-1 min-w-0">
+                <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
                     <i class="fas fa-dumbbell text-white text-lg"></i>
                 </div>
-                <div>
-                    <div class="text-white font-bold text-lg">${program.name}</div>
-                    <div class="text-white/60 text-sm">${program.exercises ? program.exercises.length : 0} exercise(s)</div>
+                <div class="min-w-0 flex-1">
+                    <div class="text-white font-bold text-lg truncate">${program.name}</div>
+                    <div class="text-white/60 text-sm truncate">${program.exercises ? program.exercises.length : 0} exercise(s)</div>
                 </div>
             </div>
-            <div class="flex items-center space-x-2">
-                <button onclick="loadProgram('${program.id}')" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-                    <i class="fas fa-play mr-2"></i>Open
+            <div class="flex items-center space-x-2 flex-shrink-0 ml-3">
+                <button onclick="loadProgram('${program.id}')" class="px-3 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center whitespace-nowrap">
+                    <i class="fas fa-play mr-1 text-xs"></i>Open
                 </button>
-                <button onclick="deleteProgram('${program.id}')" class="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-                    <i class="fas fa-trash"></i>
+                <button onclick="deleteProgram('${program.id}')" class="px-3 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center whitespace-nowrap">
+                    <i class="fas fa-trash text-xs"></i>
                 </button>
             </div>
         `;
@@ -399,21 +399,21 @@ function renderProgramsDropdownProgram() {
         const div = document.createElement('div');
         div.className = 'flex items-center justify-between p-4 bg-gradient-to-r from-white/5 to-white/10 rounded-xl hover:from-white/10 hover:to-white/15 transition-all duration-300 border border-white/10 hover:border-white/20 group';
         div.innerHTML = `
-            <div class="flex items-center space-x-4">
-                <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+            <div class="flex items-center space-x-4 flex-1 min-w-0">
+                <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
                     <i class="fas fa-dumbbell text-white text-lg"></i>
                 </div>
-                <div>
-                    <div class="text-white font-bold text-lg">${program.name}</div>
-                    <div class="text-white/60 text-sm">${program.exercises ? program.exercises.length : 0} exercise(s)</div>
+                <div class="min-w-0 flex-1">
+                    <div class="text-white font-bold text-lg truncate">${program.name}</div>
+                    <div class="text-white/60 text-sm truncate">${program.exercises ? program.exercises.length : 0} exercise(s)</div>
                 </div>
             </div>
-            <div class="flex items-center space-x-2">
-                <button onclick="loadProgram('${program.id}')" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-                    <i class="fas fa-play mr-2"></i>Open
+            <div class="flex items-center space-x-2 flex-shrink-0 ml-3">
+                <button onclick="loadProgram('${program.id}')" class="px-3 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center whitespace-nowrap">
+                    <i class="fas fa-play mr-1 text-xs"></i>Open
                 </button>
-                <button onclick="deleteProgram('${program.id}')" class="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-                    <i class="fas fa-trash"></i>
+                <button onclick="deleteProgram('${program.id}')" class="px-3 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center whitespace-nowrap">
+                    <i class="fas fa-trash text-xs"></i>
                 </button>
             </div>
         `;

@@ -49,28 +49,28 @@
             
             <!-- Programs Dropdown -->
             <div class="relative" id="programsDropdown">
-              <button id="programsBtn" class="px-6 py-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white rounded-xl hover:from-purple-500/30 hover:to-pink-500/30 transition-all duration-300 flex items-center border border-purple-400/30 hover:border-purple-400/50 shadow-lg hover:shadow-xl">
-                <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mr-3">
+              <button id="programsBtn" class="px-6 py-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white rounded-xl hover:from-purple-500/30 hover:to-pink-500/30 transition-all duration-300 flex items-center border border-purple-400/30 hover:border-purple-400/50 shadow-lg hover:shadow-xl min-w-[140px]">
+                <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
                   <i class="fas fa-dumbbell text-white text-sm"></i>
                 </div>
-                <span class="font-semibold">Programs</span>
-                <i class="fas fa-chevron-down ml-3 transition-transform duration-300"></i>
+                <span class="font-semibold whitespace-nowrap">Programs</span>
+                <i class="fas fa-chevron-down ml-3 transition-transform duration-300 flex-shrink-0"></i>
               </button>
               <div id="programsMenu" class="absolute right-0 mt-3 w-96 glass bg-white/15 backdrop-blur-2xl rounded-3xl border border-white/40 shadow-2xl opacity-0 invisible transform translate-y-4 transition-all duration-500 z-50 overflow-hidden">
                 <!-- Header with gradient background -->
                 <div class="bg-gradient-to-r from-purple-500/20 to-pink-500/20 p-6 border-b border-white/20">
                   <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                      <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
-                        <i class="fas fa-dumbbell text-white"></i>
+                    <div class="flex items-center space-x-3 flex-1 min-w-0">
+                      <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
+                        <i class="fas fa-dumbbell text-white text-lg"></i>
                       </div>
-                      <div>
-                        <h3 class="text-xl font-bold text-white">Your Programs</h3>
-                        <p class="text-white/70 text-sm">Manage your workout routines</p>
+                      <div class="min-w-0 flex-1">
+                        <h3 class="text-xl font-bold text-white truncate">Your Programs</h3>
+                        <p class="text-white/70 text-sm truncate">Manage your workout routines</p>
                       </div>
                     </div>
-                    <button id="newProgramBtn" class="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-semibold rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-                      <i class="fas fa-plus mr-2"></i>New Program
+                    <button id="newProgramBtn" class="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-semibold rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center whitespace-nowrap flex-shrink-0 ml-3">
+                      <i class="fas fa-plus mr-2 text-sm"></i>New Program
                     </button>
                   </div>
                 </div>
@@ -92,9 +92,9 @@
                 <!-- Footer with quick actions -->
                 <div class="bg-white/5 p-4 border-t border-white/10">
                   <div class="flex items-center justify-between text-xs text-white/60">
-                    <span>Total Programs: <span id="programCount" class="text-purple-400 font-semibold">0</span></span>
-                    <button onclick="showPage('settingsPage')" class="text-white/60 hover:text-white transition-colors">
-                      <i class="fas fa-cog mr-1"></i>Settings
+                    <span class="flex-shrink-0">Total Programs: <span id="programCount" class="text-purple-400 font-semibold">0</span></span>
+                    <button onclick="showPage('settingsPage')" class="text-white/60 hover:text-white transition-colors flex items-center whitespace-nowrap flex-shrink-0 ml-3">
+                      <i class="fas fa-cog mr-1 text-xs"></i>Settings
                     </button>
                   </div>
                 </div>
@@ -121,28 +121,28 @@
           <div class="flex items-center space-x-4">
             <!-- Programs Dropdown -->
             <div class="relative" id="programsDropdownProgram">
-              <button id="programsBtnProgram" class="px-6 py-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white rounded-xl hover:from-purple-500/30 hover:to-pink-500/30 transition-all duration-300 flex items-center border border-purple-400/30 hover:border-purple-400/50 shadow-lg hover:shadow-xl">
-                <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mr-3">
+              <button id="programsBtnProgram" class="px-6 py-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white rounded-xl hover:from-purple-500/30 hover:to-pink-500/30 transition-all duration-300 flex items-center border border-purple-400/30 hover:border-purple-400/50 shadow-lg hover:shadow-xl min-w-[140px]">
+                <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
                   <i class="fas fa-dumbbell text-white text-sm"></i>
                 </div>
-                <span class="font-semibold">Programs</span>
-                <i class="fas fa-chevron-down ml-3 transition-transform duration-300"></i>
+                <span class="font-semibold whitespace-nowrap">Programs</span>
+                <i class="fas fa-chevron-down ml-3 transition-transform duration-300 flex-shrink-0"></i>
               </button>
               <div id="programsMenuProgram" class="absolute right-0 mt-3 w-96 glass bg-white/15 backdrop-blur-2xl rounded-3xl border border-white/40 shadow-2xl opacity-0 invisible transform translate-y-4 transition-all duration-500 z-50 overflow-hidden">
                 <!-- Header with gradient background -->
                 <div class="bg-gradient-to-r from-purple-500/20 to-pink-500/20 p-6 border-b border-white/20">
                   <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                      <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
-                        <i class="fas fa-dumbbell text-white"></i>
+                    <div class="flex items-center space-x-3 flex-1 min-w-0">
+                      <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
+                        <i class="fas fa-dumbbell text-white text-lg"></i>
                       </div>
-                      <div>
-                        <h3 class="text-xl font-bold text-white">Your Programs</h3>
-                        <p class="text-white/70 text-sm">Manage your workout routines</p>
+                      <div class="min-w-0 flex-1">
+                        <h3 class="text-xl font-bold text-white truncate">Your Programs</h3>
+                        <p class="text-white/70 text-sm truncate">Manage your workout routines</p>
                       </div>
                     </div>
-                    <button id="newProgramBtnProgram" class="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-semibold rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-                      <i class="fas fa-plus mr-2"></i>New Program
+                    <button id="newProgramBtnProgram" class="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-semibold rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center whitespace-nowrap flex-shrink-0 ml-3">
+                      <i class="fas fa-plus mr-2 text-sm"></i>New Program
                     </button>
                   </div>
                 </div>
@@ -164,9 +164,9 @@
                 <!-- Footer with quick actions -->
                 <div class="bg-white/5 p-4 border-t border-white/10">
                   <div class="flex items-center justify-between text-xs text-white/60">
-                    <span>Total Programs: <span id="programCountProgram" class="text-purple-400 font-semibold">0</span></span>
-                    <button onclick="showPage('settingsPage')" class="text-white/60 hover:text-white transition-colors">
-                      <i class="fas fa-cog mr-1"></i>Settings
+                    <span class="flex-shrink-0">Total Programs: <span id="programCountProgram" class="text-purple-400 font-semibold">0</span></span>
+                    <button onclick="showPage('settingsPage')" class="text-white/60 hover:text-white transition-colors flex items-center whitespace-nowrap flex-shrink-0 ml-3">
+                      <i class="fas fa-cog mr-1 text-xs"></i>Settings
                     </button>
                   </div>
                 </div>
