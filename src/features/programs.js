@@ -82,7 +82,7 @@ function displayProgramsList() {
                     </div>
                     <div class="min-w-0 flex-1">
                         <h3 class="text-xl font-bold text-white truncate">${program.name}</h3>
-                        <p class="text-white/70 truncate">${program.exercises ? program.exercises.length : 0} exercises</p>
+                        <p class="text-white/70 truncate">${program.exercises ? program.exercises.length : 0} ${(program.exercises ? program.exercises.length : 0) === 1 ? 'exercise' : 'exercises'}</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-2 flex-shrink-0 ml-4">
@@ -359,7 +359,7 @@ function renderProgramsDropdown() {
                 </div>
                 <div class="min-w-0 flex-1">
                     <div class="text-white font-bold text-lg truncate">${program.name}</div>
-                    <div class="text-white/60 text-sm truncate">${program.exercises ? program.exercises.length : 0} exercise(s)</div>
+                    <div class="text-white/60 text-sm truncate">${program.exercises ? program.exercises.length : 0} ${(program.exercises ? program.exercises.length : 0) === 1 ? 'exercise' : 'exercises'}</div>
                 </div>
             </div>
             <div class="flex items-center space-x-2 flex-shrink-0 ml-3">
@@ -405,7 +405,7 @@ function renderProgramsDropdownProgram() {
                 </div>
                 <div class="min-w-0 flex-1">
                     <div class="text-white font-bold text-lg truncate">${program.name}</div>
-                    <div class="text-white/60 text-sm truncate">${program.exercises ? program.exercises.length : 0} exercise(s)</div>
+                    <div class="text-white/60 text-sm truncate">${program.exercises ? program.exercises.length : 0} ${(program.exercises ? program.exercises.length : 0) === 1 ? 'exercise' : 'exercises'}</div>
                 </div>
             </div>
             <div class="flex items-center space-x-2 flex-shrink-0 ml-3">
