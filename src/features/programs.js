@@ -51,8 +51,8 @@ function showProgramsList() {
 
 // Display programs in the list
 function displayProgramsList() {
-    const programsList = document.getElementById('programsList');
-    const noProgramsMessage = document.getElementById('noProgramsMessage');
+    const programsList = document.getElementById('programsListHome');
+    const noProgramsMessage = document.getElementById('noProgramsMessageHome');
     
     if (!programsList || !noProgramsMessage) return;
     
