@@ -56,10 +56,13 @@ function displayProgramsList() {
     
     if (!programsList || !noProgramsMessage) return;
     
+    // Use window.allPrograms if available, fallback to allPrograms
+    const programs = window.allPrograms || allPrograms;
+    
     // Clear existing content
     programsList.innerHTML = '';
     
-    if (allPrograms.length === 0) {
+    if (programs.length === 0) {
         noProgramsMessage.classList.remove('hidden');
         return;
     }
@@ -67,7 +70,7 @@ function displayProgramsList() {
     noProgramsMessage.classList.add('hidden');
     
     // Display each program
-    allPrograms.forEach((program, index) => {
+    programs.forEach((program, index) => {
         const programCard = document.createElement('div');
         programCard.className = 'glass bg-white/10 rounded-2xl p-6 border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 cursor-pointer';
         
@@ -102,8 +105,9 @@ function displayProgramsList() {
 
 // Start a program
 function startProgram(index) {
-    if (index >= 0 && index < allPrograms.length) {
-        const program = allPrograms[index];
+    const programs = window.allPrograms || allPrograms;
+    if (index >= 0 && index < programs.length) {
+        const program = programs[index];
         currentProgram = program;
         currentProgramIndex = index;
         
@@ -126,8 +130,9 @@ function startProgram(index) {
 
 // Edit a program
 function editProgram(index) {
-    if (index >= 0 && index < allPrograms.length) {
-        const program = allPrograms[index];
+    const programs = window.allPrograms || allPrograms;
+    if (index >= 0 && index < programs.length) {
+        const program = programs[index];
         currentProgram = program;
         currentProgramIndex = index;
         
@@ -150,11 +155,14 @@ function editProgram(index) {
 
 // Delete a program
 function deleteProgram(index) {
-    if (index >= 0 && index < allPrograms.length) {
-        const program = allPrograms[index];
+    const programs = window.allPrograms || allPrograms;
+    if (index >= 0 && index < programs.length) {
+        const program = programs[index];
         
         if (confirm(`Are you sure you want to delete "${program.name}"?`)) {
-            allPrograms.splice(index, 1);
+            programs.splice(index, 1);
+            allPrograms = programs;
+            window.allPrograms = allPrograms;
             saveAllPrograms();
             displayProgramsList();
             showNotification('Program deleted successfully!', 'success');
