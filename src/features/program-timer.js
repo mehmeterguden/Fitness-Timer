@@ -251,7 +251,9 @@ function runProgramTimerStep() {
     } else {
         colorClass = timerColor.text;
         iconClass = 'fas fa-clock';
-        stepInfo = `${step.exerciseName} finished - Rest before next exercise`;
+        // Get next exercise name
+        const nextExercise = getNextExerciseName(step.exerciseIndex);
+        stepInfo = `${step.exerciseName} finished - Rest before ${nextExercise}`;
         soundType = 'restEnd';
         displayText = 'Program Rest';
     }
@@ -562,6 +564,17 @@ function updateProgramSkipButtonStates() {
     skipRestBtn.disabled = currentStep.type !== 'Program Rest';
     if (skipSetRestBtnProgram) skipSetRestBtnProgram.disabled = currentStep.type !== 'Set Rest';
     if (skipSetBtnProgram) skipSetBtnProgram.disabled = currentStep.type === 'Program Rest';
+}
+
+function getNextExerciseName(currentExerciseIndex) {
+    if (!currentProgram || !currentProgram.exercises) return 'next exercise';
+    
+    const nextIndex = currentExerciseIndex + 1;
+    if (nextIndex < currentProgram.exercises.length) {
+        return currentProgram.exercises[nextIndex].name;
+    }
+    
+    return 'program end';
 }
 
 function getProgramTimerColor(type, colorKey) {

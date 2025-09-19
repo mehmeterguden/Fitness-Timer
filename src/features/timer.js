@@ -245,15 +245,18 @@ function updateTimerDisplay(status = '') {
     } else if (currentStep.type === 'Move Rest') {
         colorClass = 'text-orange-400';
         iconClass = 'fas fa-pause';
-        stepInfo = `Set ${currentStep.set} - Rep ${currentStep.rep} - Move ${currentStep.move} rest`;
+        const nextMove = getNextMoveName(currentStep);
+        stepInfo = `Set ${currentStep.set} - Rep ${currentStep.rep} - Rest before ${nextMove}`;
     } else if (currentStep.type === 'Rep Rest') {
         colorClass = 'text-red-400';
         iconClass = 'fas fa-coffee';
-        stepInfo = `Set ${currentStep.set} - Rep ${currentStep.rep} rest`;
+        const nextRep = getNextRepInfo(currentStep);
+        stepInfo = `Set ${currentStep.set} - Rest before ${nextRep}`;
     } else {
         colorClass = 'text-red-400';
         iconClass = 'fas fa-pause';
-        stepInfo = `Set ${currentStep.set} rest`;
+        const nextSet = getNextSetInfo(currentStep);
+        stepInfo = `Rest before ${nextSet}`;
     }
     
     const statusHtml = status ? `<div class="text-2xl font-bold text-white mb-4">${status}</div>` : '';
@@ -387,19 +390,22 @@ function runTimerStep() {
     } else if (step.type === 'Move Rest') {
         colorClass = timerColor.text;
         iconClass = 'fas fa-pause';
-        stepInfo = `Set ${step.set} - Rep ${step.rep} - Move ${step.move} rest`;
+        const nextMove = getNextMoveName(step);
+        stepInfo = `Set ${step.set} - Rep ${step.rep} - Rest before ${nextMove}`;
         soundType = 'restEnd';
         displayText = 'Move Rest';
     } else if (step.type === 'Rep Rest') {
         colorClass = timerColor.text;
         iconClass = 'fas fa-coffee';
-        stepInfo = `Set ${step.set} - Rep ${step.rep} rest`;
+        const nextRep = getNextRepInfo(step);
+        stepInfo = `Set ${step.set} - Rest before ${nextRep}`;
         soundType = 'restEnd';
         displayText = 'Rep Rest';
     } else {
         colorClass = timerColor.text;
         iconClass = 'fas fa-pause';
-        stepInfo = `Set ${step.set} rest`;
+        const nextSet = getNextSetInfo(step);
+        stepInfo = `Rest before ${nextSet}`;
         soundType = 'setEnd';
         displayText = 'Set Rest';
     }
@@ -505,6 +511,45 @@ function saveColorSettings() {
 function updateColorSetting(type, value) {
     colorSettings[type] = value;
     saveColorSettings();
+}
+
+// Get next move name for rest periods
+function getNextMoveName(currentStep) {
+    const exercise = currentProgram.exercises[currentExerciseIndex];
+    if (!exercise || !exercise.moves) return 'next move';
+    
+    const nextMoveIndex = currentStep.move;
+    if (nextMoveIndex < exercise.moves.length) {
+        return exercise.moves[nextMoveIndex].name;
+    }
+    
+    return 'next rep';
+}
+
+// Get next rep info for rest periods
+function getNextRepInfo(currentStep) {
+    const exercise = currentProgram.exercises[currentExerciseIndex];
+    if (!exercise) return 'next rep';
+    
+    const nextRep = currentStep.rep + 1;
+    if (nextRep <= exercise.repCount) {
+        return `Rep ${nextRep}`;
+    }
+    
+    return 'next set';
+}
+
+// Get next set info for rest periods
+function getNextSetInfo(currentStep) {
+    const exercise = currentProgram.exercises[currentExerciseIndex];
+    if (!exercise) return 'next set';
+    
+    const nextSet = currentStep.set + 1;
+    if (nextSet <= exercise.setCount) {
+        return `Set ${nextSet}`;
+    }
+    
+    return 'exercise end';
 }
 
 // Get color for timer display
