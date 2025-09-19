@@ -1,18 +1,18 @@
 # 🏋️‍♂️ Fitness Timer
 
-[![GitHub stars](https://img.shields.io/github/stars/mehmeterguden/fitness-timer?style=social)](https://github.com/mehmeterguden/fitness-timer/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/mehmeterguden/fitness-timer?style=social)](https://github.com/mehmeterguden/fitness-timer/network/members)
-[![GitHub issues](https://img.shields.io/github/issues/mehmeterguden/fitness-timer)](https://github.com/mehmeterguden/fitness-timer/issues)
-[![GitHub license](https://img.shields.io/github/license/mehmeterguden/fitness-timer)](https://github.com/mehmeterguden/fitness-timer/blob/main/LICENSE)
-[![GitHub last commit](https://img.shields.io/github/last-commit/mehmeterguden/fitness-timer)](https://github.com/mehmeterguden/fitness-timer/commits/main)
+[![GitHub stars](https://img.shields.io/github/stars/mehmeterguden/Fitness-Timer?style=social)](https://github.com/mehmeterguden/Fitness-Timer/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/mehmeterguden/Fitness-Timer?style=social)](https://github.com/mehmeterguden/Fitness-Timer/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/mehmeterguden/Fitness-Timer)](https://github.com/mehmeterguden/Fitness-Timer/issues)
+[![GitHub license](https://img.shields.io/github/license/mehmeterguden/Fitness-Timer)](https://github.com/mehmeterguden/Fitness-Timer/blob/main/LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/mehmeterguden/Fitness-Timer)](https://github.com/mehmeterguden/Fitness-Timer/commits/main)
 
 A modern, feature-rich workout timer application built with vanilla JavaScript, featuring beautiful glassmorphism design, program management, and intelligent rest timing.
 
-[![Fitness Timer Demo](https://img.shields.io/badge/Demo-Live%20Preview-blue?style=for-the-badge)](https://mehmeterguden.github.io/fitness-timer/)
+[![Fitness Timer Demo](https://img.shields.io/badge/Demo-Live%20Preview-blue?style=for-the-badge)](https://mehmeterguden.github.io/Fitness-Timer/)
 
 ## ✨ Features
 
-> **[🎯 Try it live!](https://mehmeterguden.github.io/fitness-timer/)** - Experience the full functionality in your browser
+> **[🎯 Try it live!](https://mehmeterguden.github.io/Fitness-Timer/)** - Experience the full functionality in your browser
 
 ### 🎯 **Core Timer Functionality**
 - **Individual Exercise Timer**: Set-based workouts with customizable rest periods
@@ -47,12 +47,12 @@ A modern, feature-rich workout timer application built with vanilla JavaScript, 
 ## 🚀 Quick Start
 
 ### 🌐 **Live Demo**
-**[Try the Fitness Timer Live!](https://mehmeterguden.github.io/fitness-timer/)**
+**[Try the Fitness Timer Live!](https://mehmeterguden.github.io/Fitness-Timer/)**
 
 ### 1. **Clone the Repository**
 ```bash
-git clone https://github.com/mehmeterguden/fitness-timer.git
-cd fitness-timer
+git clone https://github.com/mehmeterguden/Fitness-Timer.git
+cd Fitness-Timer
 ```
 
 ### 2. **Open in Browser**
@@ -142,10 +142,10 @@ We welcome contributions! Here's how you can help:
 ### **Development Setup**
 ```bash
 # Clone the repository
-git clone https://github.com/mehmeterguden/fitness-timer.git
+git clone https://github.com/mehmeterguden/Fitness-Timer.git
 
 # Navigate to project directory
-cd fitness-timer
+cd Fitness-Timer
 
 # Open in your favorite editor
 code .  # VS Code
